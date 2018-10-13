@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/tshelburne/cycle-routing-driver",
   "dependencies": {
+    "@babel/cli": "^7.1.2",
     "@cycle/history": "^6.10.0",
     "qs": "^6.5.2"
   },
