@@ -1,8 +1,8 @@
 {
   "name": "cycle-routing-driver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A bare-bones router for simple frontend routing in CycleJS",
-  "main": "index.js",
+  "main": "dist/routing-driver.js",
   "scripts": {
     "test": "mocha",
     "clean": "rm -rf dist",
