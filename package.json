@@ -1,0 +1,28 @@
+{
+  "name": "cycle-routing-driver",
+  "version": "1.0.0",
+  "description": "A bare-bones router for simple frontend routing in CycleJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tshelburne/cycle-routing-driver"
+  },
+  "keywords": [
+    "cyclejs",
+    "cycle",
+    "routing",
+    "router"
+  ],
+  "author": {
+    "name": "Tim Shelburne",
+    "email": "shelburt02@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tshelburne/cycle-routing-driver/issues"
+  },
+  "homepage": "https://github.com/tshelburne/cycle-routing-driver"
+}
