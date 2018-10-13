@@ -1,10 +1,13 @@
 {
   "name": "cycle-routing-driver",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A bare-bones router for simple frontend routing in CycleJS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "clean": "rm -rf dist",
+    "build": "babel src --out-dir dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,5 +27,27 @@
   "bugs": {
     "url": "https://github.com/tshelburne/cycle-routing-driver/issues"
   },
-  "homepage": "https://github.com/tshelburne/cycle-routing-driver"
+  "homepage": "https://github.com/tshelburne/cycle-routing-driver",
+  "dependencies": {
+    "@cycle/history": "^6.10.0",
+    "qs": "^6.5.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "mocha-clean": "^1.0.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "modules": "auto"
+        }
+      ]
+    ]
+  }
 }
