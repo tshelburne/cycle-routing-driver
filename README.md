@@ -33,7 +33,7 @@ to force a route change based on an event, just stream it in via the sinks.
 
 ```js
 import {run} from '@cycle/run'
-import makeRoutingDriver, {routes} from 'lib/cyclejs/routing-driver'
+import makeRoutingDriver, {routes} from 'cycle-routing-driver'
 
 function main(sources) {
 	// in addition to path data and parameters, we get query string data so your page can render accordingly
