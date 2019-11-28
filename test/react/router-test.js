@@ -37,32 +37,40 @@ describe(`react integration`, function() {
 	describe(`<Route />`, function() {
 
 		it(`renders nothing when not matched`, function() {
-			const wrapper = shallow(<App route={{page: `none`}} />)
+			const wrapper = shallow(<App route={{page: `none`, data: {}, query: {}}} />)
 			expect(wrapper.html()).to.equal(``)
 		})
 
 		it(`renders on a page match`, function() {
-			const page1 = shallow(<App route={{page: `page1`}} />)
+			const page1 = shallow(<App route={{page: `page1`, data: {}, query: {}}} />)
 			expect(page1.html()).to.equal(`<div>page 1</div>`)
 
-			const page2 = shallow(<App route={{page: `page2`}} />)
+			const page2 = shallow(<App route={{page: `page2`, data: {}, query: {}}} />)
 			expect(page2.html()).to.equal(`<div>page 2</div>`)
 		})
 
 		it(`renders on a data match`, function() {
-			const page3true = shallow(<App route={{page: `page3`, data: {prop: true}}} />)
+			const page3true = shallow(<App route={{page: `page3`, data: {prop: true}, query: {}}} />)
 			expect(page3true.html()).to.equal(`<div>page 3 w/ true</div>`)
 
-			const page3false = shallow(<App route={{page: `page3`, data: {prop: false}}} />)
+			const page3false = shallow(<App route={{page: `page3`, data: {prop: false}, query: {}}} />)
 			expect(page3false.html()).to.equal(`<div>page 3 w/ false</div>`)
 		})
 
 		it(`renders on a query match`, function() {
-			const page4true = shallow(<App route={{page: `page4`, query: {prop: true}}} />)
+			const page4true = shallow(<App route={{page: `page4`, data: {}, query: {prop: true}}} />)
 			expect(page4true.html()).to.equal(`<div>page 4 w/ true</div>`)
 
-			const page4false = shallow(<App route={{page: `page4`, query: {prop: false}}} />)
+			const page4false = shallow(<App route={{page: `page4`, data: {}, query: {prop: false}}} />)
 			expect(page4false.html()).to.equal(`<div>page 4 w/ false</div>`)
+		})
+
+		it(`renders on a function match`, function() {
+			const dataTrue = shallow(<App route={{page: `no page`, data: {prop: `test`}, query: {}}} />)
+			expect(dataTrue.html()).to.equal(`<div>data or query match</div>`)
+
+			const queryTrue = shallow(<App route={{page: `other page`, data: {}, query: {prop: `test`}}} />)
+			expect(queryTrue.html()).to.equal(`<div>data or query match</div>`)
 		})
 
 	})
@@ -139,6 +147,10 @@ const App = ({route}) => {
 		</Route>
 		<Route match={{page: `page4`, query: {prop: false}}}>
 			<div>page 4 w/ false</div>
+		</Route>
+
+		<Route match={({data, query}) => (data.prop || query.prop) === `test`}>
+			<div>data or query match</div>
 		</Route>
 	</Router>
 }
