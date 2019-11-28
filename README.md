@@ -92,3 +92,84 @@ run(main, {
 	)
 })
 ```
+
+## React Integration
+
+Because I use React for nearly all my frontend work, I've added a custom integration for easy use of the
+routing within a React application. See the example below, using example routes from the code above. Note
+the use of the `Router`, `Route`, and `Link` components, as well as the `useRoute` hook.
+
+```js
+import {run} from '@cycle/run'
+import makeReactDriver from '@sunny-g/cycle-react-driver'
+import makeRoutingDriver, {routes} from 'cycle-routing-driver'
+import {Router, Route, Link, useRoute} from 'cycle-routing-driver/dist/react/router'
+
+import Modal from './ui/components/modal'
+import Homepage from './ui/pages/home'
+import EditPost from './ui/pages/post/edit'
+
+const PageName = () => {
+	const route = useRoute()
+
+	return <span>Current page: {route.page}</span>
+}
+
+const App = ({actions}) => {
+	return <div>
+		<h1><PageName /></h1>
+
+		<nav>
+			<Link className="nav-link" to="homepage" activeClassName="active">Home</Link>
+			<a className="nav-link" onClick={() => actions.modal.activate(`signup`)}>Signup</a>
+			<Link className="nav-link" to={{page: `post.edit`, data: {id: 1}}} activeClassName="active">Edit Post 1</Link>
+			<Link className="nav-link" to={{page: `post.edit`, data: {id: 2}}} activeClassName="active">Edit Post 2</Link>
+			<Link className="nav-link" to={{page: `post.edit`, data: {id: 3}}} activeClassName="active">Edit Post 3</Link>
+		</nav>
+
+		<main>
+			<Route match="homepage"><Homepage /></Route>
+			<Route match="post.edit"><EditPost /></Route>
+		</main>
+
+		<aside>
+			<Route match={{page: "post.edit", data: {id: 1}}}>
+				Always save the first post!
+			</Route>
+		</aside>
+
+		<Route match={({query}) => !!query.modal}>
+			<Modal active onClose={actions.modal.deactivate} />
+		</Route>
+	</div>
+}
+
+function main(sources) {
+	const actions = {
+		modal: {
+			activate: sources.react.handler(`modal.activate`),
+			deactivate: sources.react.handler(`modal.deactivate`),
+		}
+	}
+
+	return {
+		// other stuff...,
+		route: xs.merge(
+			sources.route.filter(({page}) => page === `404`).mapTo({page: `homepage`}),
+			sources.react.event(`modal.activate`).map((modal) => ({query: {modal}})),
+			sources.react.event(`modal.deactivate`).mapTo({query: {modal: null}}),
+		),
+		react: sources.route.map((route) =>
+			<Router route={route}>
+				<App actions={actions}/>
+			</Router>
+		),
+	}
+}
+
+run(main, {
+	// other stuff...,
+	route: makeRoutingDriver(/*route definition...*/),
+	react: makeReactDriver(document.getElementById(`app`)),
+})
+````
