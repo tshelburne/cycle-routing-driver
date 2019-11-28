@@ -4,7 +4,7 @@ cycle-routing-driver
 [![CircleCI](https://circleci.com/gh/tshelburne/cycle-routing-driver.svg?style=svg)](https://circleci.com/gh/tshelburne/cycle-routing-driver)
 
 Routing driver for [CycleJS](https://cycle.js.org/) that enables simple client-side routing, without worrying about
-the frills that more complex routers bring.
+the frills that more complex routers bring. Includes a React integration to make UI route usage simple.
 
 ## Intention
 

@@ -17,7 +17,8 @@
     "cyclejs",
     "cycle",
     "routing",
-    "router"
+    "router",
+    "react"
   ],
   "author": {
     "name": "Tim Shelburne",
