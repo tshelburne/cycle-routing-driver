@@ -98,7 +98,7 @@ export function createRouter(routes, config = {}) {
 				: [external.page, external.path || `/${external.page}`]
 
 		const path = `${base.path || ``}${preBasePath}`
-		const pathRegex = new RegExp(`^${path.replace(/:\w*/g, `(\\w*)`)}\/?$`)
+		const pathRegex = new RegExp(`^${path.replace(/:\w*/g, `([\\w-.~]*)`)}\/?$`)
 		const page = `${base.page ? `${base.page}.` : ``}${preBasePage}`
 		const params = (path.match(/:\w*/g) || []).map(str => str.slice(1))
 		const paramMappers = {

@@ -209,6 +209,19 @@ describe(`routing driver`, function() {
 			})
 		})
 
+		it(`handles a known route with a special characters param`, function() {
+			expect(
+				this.router.fromHistory({
+					pathname: `/path/to/_1.2-3~4`,
+					search: `?`,
+				})
+			).to.deep.equal({
+				page: `single-param`,
+				data: {data: `_1.2-3~4`},
+				query: {},
+			})
+		})
+
 		it(`handles a known route with a mapped param`, function() {
 			expect(
 				this.router.fromHistory({
