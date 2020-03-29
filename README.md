@@ -58,13 +58,13 @@ function main(sources) {
  * the configuration below supports the following route structure:
  * /homepage
  * /about
- * /post/:post
- * /post/:post/edit
- * /post/:post/performance (this will auto-redirect to /post/:post/performance/dashboard)
- * /post/:post/performance/demographics
- * /post/:post/performance/reach
- * /post/:post/performance/dashboard
- * /post/:post/performance/search-ranking
+ * /posts/:post
+ * /posts/:post/edit
+ * /posts/:post/performance (this will auto-redirect to /posts/:post/performance/dashboard)
+ * /posts/:post/performance/demographics
+ * /posts/:post/performance/reach
+ * /posts/:post/performance/dashboard
+ * /posts/:post/performance/search-ranking
  */
 run(main, {
 	// other stuff...,
@@ -85,7 +85,7 @@ run(main, {
 			params: {
 				post: {
 					toData: _ => _,
-					toParam: data => data.id || data,
+					toParam: post => post.id || post,
 				},
 			},
 		}
@@ -122,9 +122,9 @@ const App = ({actions}) => {
 		<nav>
 			<Link className="nav-link" to="homepage" activeClassName="active">Home</Link>
 			<a className="nav-link" onClick={() => actions.modal.activate(`signup`)}>Signup</a>
-			<Link className="nav-link" to={{page: `post.edit`, data: {id: 1}}} activeClassName="active">Edit Post 1</Link>
-			<Link className="nav-link" to={{page: `post.edit`, data: {id: 2}}} activeClassName="active">Edit Post 2</Link>
-			<Link className="nav-link" to={{page: `post.edit`, data: {id: 3}}} activeClassName="active">Edit Post 3</Link>
+			<Link className="nav-link" to={{page: `post.edit`, data: {post: {id: 1}}}} activeClassName="active">Edit Post 1</Link>
+			<Link className="nav-link" to={{page: `post.edit`, data: {post: 2}}} activeClassName="active">Edit Post 2</Link>
+			<Link className="nav-link" to={{page: `post.edit`, data: {post: {id: 3}}}} activeClassName="active">Edit Post 3</Link>
 		</nav>
 
 		<main>
@@ -133,7 +133,7 @@ const App = ({actions}) => {
 		</main>
 
 		<aside>
-			<Route match={{page: "post.edit", data: {id: 1}}}>
+			<Route match={{page: "post.edit", data: {post: {id: 1}}}}>
 				Always save the first post!
 			</Route>
 		</aside>
