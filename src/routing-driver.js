@@ -15,7 +15,11 @@ function makeRoutingDriver(...routerArgs) {
 
 		return history_.map(router.fromHistory).map(route => ({
 			...route,
-			toUrl: next => router.toUrl({...route, ...next}),
+			toUrl: next => router.toUrl({
+				...route,
+				...next,
+				data: {...route.data, ...next.data},
+			}),
 		}))
 	}
 }
