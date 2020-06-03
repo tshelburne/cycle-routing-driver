@@ -129,6 +129,7 @@ const App = ({actions}) => {
 
 		<main>
 			<Route match="homepage"><Homepage /></Route>
+			<Route match="post" strict>This doesn't show on subroutes (like post.edit)</Route>
 			<Route match="post.edit"><EditPost /></Route>
 		</main>
 
