@@ -392,41 +392,64 @@ describe(`routes template`, function() {
 		const routing = routes`
 			one
 			two
-				nested (/nested/:nested)
+				nested (/:nested) -> base
+					base (/)
+					second (/:second)
+						third
 			three
+				nested (/nested/:nested) -> base
+					base (/)
+					second (/:second)
 		`
 
 		expect(routing).to.deep.equal([
-			{
-				index: undefined,
-				page: `one`,
-				params: undefined,
-				path: undefined,
-				subs: []
-			},
-			{
-				index: undefined,
+			routeHelper({ page: `one` }),
+			routeHelper({
 				page: `two`,
-				params: undefined,
-				path: undefined,
 				subs: [
-					{
-						index: undefined,
+					routeHelper({
+						index: `base`,
 						page: `nested`,
-						params: undefined,
-						path: `/nested/:nested`,
-						subs: []
-					}
+						path: `/:nested`,
+						subs: [
+							routeHelper({ page: `base`, path: `/` }),
+							routeHelper({
+								page: `second`,
+								path: `/:second`,
+								subs: [
+									routeHelper({page: `third`})
+								]
+							}),
+						]
+					})
 				]
-			},
-			{
-				index: undefined,
+			}),
+			routeHelper({
 				page: `three`,
-				params: undefined,
-				path: undefined,
-				subs: []
-			}
+				subs: [
+					routeHelper({
+						index: `base`,
+						page: `nested`,
+						path: `/nested/:nested`,
+						subs: [
+							routeHelper({ page: `base`, path: `/` }),
+							routeHelper({ page: `second`, path: `/:second` }),
+						]
+					})
+				]
+			}),
 		])
 	})
+
+	function routeHelper(spec) {
+		return {
+			index: undefined,
+			page: undefined,
+			params: undefined,
+			path: undefined,
+			subs: [],
+			...spec,
+		}
+	}
 
 })

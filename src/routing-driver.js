@@ -136,8 +136,9 @@ export function routes(strings, ...paramsValues) {
 	}, [])
 
 	// build subrouting
-	let routes = []
 	let stack = []
+	const routes = []
+	const base = indentedRoutes[0].indent
 	indentedRoutes.forEach(current => {
 		if (stack.length == 0) {
 			stack.push(current)
@@ -154,7 +155,7 @@ export function routes(strings, ...paramsValues) {
 		}
 
 		if (prev.indent > current.indent) {
-			stack = stack.slice(0, prev.indent - current.indent - 1)
+			stack = stack.slice(0, prev.indent - current.indent - base)
 		}
 
 		const parent =
