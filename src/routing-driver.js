@@ -141,24 +141,27 @@ export function routes(strings, ...paramsValues) {
 	indentedRoutes.forEach(current => {
 		if (stack.length == 0) {
 			stack.push(current)
-			return routes.push(current.route)
+			routes.push(current.route)
+			return
 		}
 
 		const prev = stack.pop()
 
 		if (prev.indent < current.indent) {
 			stack.push(prev, current)
-			return prev.route.subs.push(current.route)
+			prev.route.subs.push(current.route)
+			return
 		}
 
 		if (prev.indent > current.indent) {
-			stack = stack.slice(0, prev.indent - current.indent)
+			stack = stack.slice(0, prev.indent - current.indent - 1)
 		}
 
 		const parent =
 			stack.length === 0 ? routes : stack[stack.length - 1].route.subs
 		stack.push(current)
-		return parent.push(current.route)
+		parent.push(current.route)
+		return
 	})
 
 	return routes

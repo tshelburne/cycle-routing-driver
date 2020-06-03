@@ -1,8 +1,7 @@
 import {expect} from 'chai'
+import {createRouter, routes} from '../src/routing-driver'
 
 describe(`routing driver`, function() {
-	const {createRouter, routes} = require(`../src/routing-driver`)
-
 	describe(`router#toUrl`, function() {
 		beforeEach(createThisRouter)
 
@@ -385,4 +384,49 @@ describe(`routing driver`, function() {
 			}
 		)
 	}
+})
+
+describe(`routes template`, function() {
+
+	it(`handles failing case https://github.com/tshelburne/cycle-routing-driver/issues/7`, function() {
+		const routing = routes`
+			one
+			two
+				nested (/nested/:nested)
+			three
+		`
+
+		expect(routing).to.deep.equal([
+			{
+				index: undefined,
+				page: `one`,
+				params: undefined,
+				path: undefined,
+				subs: []
+			},
+			{
+				index: undefined,
+				page: `two`,
+				params: undefined,
+				path: undefined,
+				subs: [
+					{
+						index: undefined,
+						page: `nested`,
+						params: undefined,
+						path: `/nested/:nested`,
+						subs: []
+					}
+				]
+			},
+			{
+				index: undefined,
+				page: `three`,
+				params: undefined,
+				path: undefined,
+				subs: []
+			}
+		])
+	})
+
 })
