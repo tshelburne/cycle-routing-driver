@@ -403,37 +403,37 @@ describe(`routes template`, function() {
 		`
 
 		expect(routing).to.deep.equal([
-			routeHelper({ page: `one` }),
-			routeHelper({
+			r({ page: `one` }),
+			r({
 				page: `two`,
 				subs: [
-					routeHelper({
+					r({
 						index: `base`,
 						page: `nested`,
 						path: `/:nested`,
 						subs: [
-							routeHelper({ page: `base`, path: `/` }),
-							routeHelper({
+							r({ page: `base`, path: `/` }),
+							r({
 								page: `second`,
 								path: `/:second`,
 								subs: [
-									routeHelper({page: `third`})
+									r({page: `third`})
 								]
 							}),
 						]
 					})
 				]
 			}),
-			routeHelper({
+			r({
 				page: `three`,
 				subs: [
-					routeHelper({
+					r({
 						index: `base`,
 						page: `nested`,
 						path: `/nested/:nested`,
 						subs: [
-							routeHelper({ page: `base`, path: `/` }),
-							routeHelper({ page: `second`, path: `/:second` }),
+							r({ page: `base`, path: `/` }),
+							r({ page: `second`, path: `/:second` }),
 						]
 					})
 				]
@@ -441,7 +441,51 @@ describe(`routes template`, function() {
 		])
 	})
 
-	function routeHelper(spec) {
+	it(`handles failing case https://github.com/tshelburne/cycle-routing-driver/issues/11`, function() {
+		const routing = routes`
+			one
+			two
+				first
+					second
+			three
+				first
+					second
+						third
+		`
+
+		expect(routing).to.deep.equal([
+			r({ page: `one` }),
+			r({
+				page: `two`,
+				subs: [
+					r({
+						page: `first`,
+						subs: [
+							r({ page: `second` }),
+						]
+					})
+				]
+			}),
+			r({
+				page: `three`,
+				subs: [
+					r({
+						page: `first`,
+						subs: [
+							r({
+								page: `second`,
+								subs: [
+									r({page: `third`})
+								]
+							}),
+						]
+					})
+				]
+			}),
+		])
+	})
+
+	function r(spec) {
 		return {
 			index: undefined,
 			page: undefined,
