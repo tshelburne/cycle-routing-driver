@@ -485,6 +485,38 @@ describe(`routes template`, function() {
 		])
 	})
 
+	it(`handles nested siblings`, function() {
+		const routing = routes`
+			one
+			two
+				first
+					second
+				first2
+					second
+		`
+
+		expect(routing).to.deep.equal([
+			r({ page: `one` }),
+			r({
+				page: `two`,
+				subs: [
+					r({
+						page: `first`,
+						subs: [
+							r({ page: `second` }),
+						]
+					}),
+					r({
+						page: `first2`,
+						subs: [
+							r({ page: `second` }),
+						]
+					})
+				]
+			})
+		])
+	})
+
 	function r(spec) {
 		return {
 			index: undefined,
