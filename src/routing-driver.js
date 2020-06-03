@@ -155,7 +155,7 @@ export function routes(strings, ...paramsValues) {
 		}
 
 		if (prev.indent > current.indent) {
-			stack = stack.slice(0, Math.max(prev.indent - current.indent - base, 0))
+			stack = stack.slice(0, current.indent - base)
 		}
 
 		const parent =
