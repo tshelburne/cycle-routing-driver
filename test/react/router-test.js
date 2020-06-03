@@ -140,6 +140,33 @@ describe(`react integration`, function() {
 			expect(wrapper.html()).to.equal(`<div>match test</div>`)
 		})
 
+		it(`renders by strict matching page`, function() {
+			const wrapper = shallow(
+				<Router route={{page: `page.sub`, data: {prop: true}, query: {prop: true}}}>
+					<Route match="page" strict>
+						<div>match page</div>
+					</Route>
+					<Route match={{page: `page`, data: {prop: true}}} strict>
+						<div>match data</div>
+					</Route>
+					<Route match={{page: `page`, query: {prop: true}}} strict>
+						<div>match query</div>
+					</Route>
+					<Route match={({data, query}) => (data.prop || query.prop)} strict>
+						<div>match function (unaffected by strict)</div>
+					</Route>
+				</Router>
+			)
+
+			expect(wrapper.html()).to.equal(`<div>match function (unaffected by strict)</div>`)
+
+			wrapper.setProps({route: {page: `page`, data: {prop: true}, query: {prop: true}}})
+			expect(wrapper.html()).to.include(`<div>match page</div>`)
+			expect(wrapper.html()).to.include(`<div>match data</div>`)
+			expect(wrapper.html()).to.include(`<div>match query</div>`)
+			expect(wrapper.html()).to.include(`<div>match function (unaffected by strict)</div>`)
+		})
+
 	})
 
 	describe(`<Link />`, function() {

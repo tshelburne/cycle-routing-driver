@@ -7,9 +7,9 @@ export const Router = ({route, children}) => {
 	return <RouteContext.Provider value={route}>{children}</RouteContext.Provider>
 }
 
-export const Route = ({match, children}) => {
+export const Route = ({match, strict, children}) => {
 	const route = useRoute()
-	const isMatch = routeMatches(match, route)
+	const isMatch = routeMatches(match, route, {strict})
 
 	return isMatch ? <React.Fragment>{children}</React.Fragment> : null
 }
@@ -31,24 +31,28 @@ export function useRoute() {
 
 // HELPERS
 
-function routeMatches(check, route) {
+function routeMatches(check, route, {strict} = {}) {
 	switch (typeof check) {
-		case `string`: return pageMatches(check, route)
+		case `string`: return pageMatches(check, route, {strict})
 		case `function`: return check(route)
 		case `object`:
 		default:
-			return !!check.page && pageMatches(check.page, route) &&
-					keysMatch(route.data, check.data) &&
-					keysMatch(route.query, check.query)
+			return !!check.page && pageMatches(check.page, route, {strict}) &&
+					(!check.data || keysMatch(route.data, check.data)) &&
+					(!check.query || keysMatch(route.query, check.query))
 	}
 }
 
-function pageMatches(page, route) {
-	const matcher = new RegExp(`^${page.replace(`.`, `\.`)}(\.\w*)*$`)
-	return matcher.test(route.page)
+function pageMatches(page, route, {strict} = {}) {
+	const expected = page.split(`.`)
+	const actual = route.page.split(`.`)
+
+	if (strict && expected.length !== actual.length) return false
+
+	return expected.every((v, i) => v === actual[i])
 }
 
-function keysMatch(actual, expected) {
+function keysMatch(actual, expected, {strict} = {}) {
 	if (!expected) return true
 
 	return Object.entries(expected).reduce((acc, [key, value]) => {
