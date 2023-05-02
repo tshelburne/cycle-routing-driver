@@ -34,7 +34,7 @@
     "qs": "^6.9.3"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
+    "react": "16 - 18",
     "classnames": "^1.0.0"
   },
   "devDependencies": {
